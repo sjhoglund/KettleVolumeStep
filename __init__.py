@@ -13,7 +13,7 @@ class KettleVolumeStep(StepBase):
     temp = Property.Number("Temperature", configurable=True)
     kettle = StepProperty.Kettle("Kettle")
     timer = Property.Number("Timer in Minutes", configurable=True)
-    sensor = Property.Sensor("Sensor")
+    sensor = StepProperty.Sensor("Sensor")
     volume = Property.Number("Volume", configurable=True)
 
     def init(self):
