@@ -24,20 +24,6 @@ class KettleVolumeStep(StepBase):
         # set target tep
         #self.set_target_temp(self.temp, self.kettle)
 
-    @cbpi.action("Turnoff kettle and start timer")
-    def start(self):
-        '''
-        Custom Action which can be execute form the brewing dashboard.
-        All method with decorator @cbpi.action("YOUR CUSTOM NAME") will be available in the user interface
-        :return: 
-        '''
-        for key, value in cbpi.cache.get("sensors").iteritems():
-            if key == int(self.sensor):
-                sensorValue = value.instance.last_value
-        if float(sensorValue) <= float(self.volume) and self.is_timer_finished() is None:
-            self.set_target_temp(self.temp, self.kettle)
-            self.start_timer(int(self.timer) * 60)
-
     def finish(self):
         self.set_target_temp(0, self.kettle)
 
@@ -51,5 +37,11 @@ class KettleVolumeStep(StepBase):
                 sensorValue = value.instance.last_value
 
         # Check if timer finished and go to next step
-        if float(sensorValue) <= float(self.volume) and self.is_timer_finished() == True:
+        if float(sensorValue) <= float(self.volume)
+            self.set_target_temp(self.temp, self.kettle)
+            if self.is_timer_finished() is None:
+                self.start_timer(int(self.timer) * 60)
+            
+        if self.is_timer_finished() == True:
+            self.notify("Mash-in Complete!", "Starting the next step.", timeout=None)
             self.next()
