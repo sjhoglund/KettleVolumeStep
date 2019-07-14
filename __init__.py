@@ -37,7 +37,7 @@ class KettleVolumeStep(StepBase):
                 sensorValue = value.instance.last_value
 
         # Check if timer finished and go to next step
-        if float(sensorValue) <= float(self.volume)
+        if float(sensorValue) <= float(self.volume):
             self.set_target_temp(self.temp, self.kettle)
             if self.is_timer_finished() is None:
                 self.start_timer(int(self.timer) * 60)
