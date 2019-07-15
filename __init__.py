@@ -1,5 +1,7 @@
 import time
 
+from modules.kettle import *
+
 from modules.core.props import Property, StepProperty
 from modules.core.step import StepBase
 from modules import cbpi
@@ -39,6 +41,10 @@ class KettleVolumeStep(StepBase):
         # Check if timer finished and go to next step
         if float(sensorValue) <= float(self.volume):
             self.set_target_temp(self.temp, self.kettle)
+            kettle_state = cbpi.cache.get("kettle")[int(self.kettle)].state
+            if kettle_state is True:
+                Kettle2View().toggle(int(self.kettle))
+                self.notify("Kettle Update", "Auto is off. Timer started.", timeout=None)
             if self.is_timer_finished() is None:
                 self.start_timer(int(self.timer) * 60)
             
